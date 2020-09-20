@@ -1,11 +1,47 @@
 import React from 'react';
+import SongPreview from './SongPreview';
+import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
 
-function TopSongs() {
+function TopSongs(props) {
+  const responsive = {
+    superLargeDesktop: {
+      breakpoint: { max: 4000, min: 3000 },
+      items: 10,
+      slidesToSlide: 9
+    },
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 5,
+      slidesToSlide: 4
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 464 },
+      items: 2,
+      slidesToSlide: 1
+    },
+    mobile: {
+      breakpoint: { max: 464, min: 0 },
+      items: 1,
+      slidesToSlide: 1
+    }
+  };
+
+  const addSong = (songs) => songs.map((song) => (
+    <SongPreview
+      key={song.id}
+      title={song.title}
+      length={song.length}
+      artist={song.artist}
+      thumbnails={song.thumbnails}
+    />
+  ));
+
   return (
-    <div className="TopSongs">
-
-    </div>
+    <Carousel className='carousel songCarousel' responsive={responsive}>
+        {addSong(props.songs)}
+    </Carousel>
   );
 }
 
-export default TopSongs;
+export default TopSongs; 
