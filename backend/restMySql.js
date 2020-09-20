@@ -145,4 +145,14 @@ app.post('/song', async (req, res) =>{
   });
 });
 
+app.post('/album', async (req, res) =>{
+  mysqlCon.query('INSERT INTO albums SET ?',req.body, (error, results, fields) => {
+    if (error) {
+      res.send(error);
+      throw error;
+    };
+    res.send(results);
+  });
+});
+
 app.listen(3001);
