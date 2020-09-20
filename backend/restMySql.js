@@ -6,25 +6,25 @@ app.use(express.json());
 app.use(logger);
 
 function logger (req, res, next) {
-    console.log('request fired ' + req.url + ' ' + req.method);
-    next();
+  console.log('request fired ' + req.url + ' ' + req.method);
+  next();
 }
 
 let mysqlCon = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "mySQLpassword",
-    database: "sql_music_service",
-    multipleStatements: true
-  });
+  host: "localhost",
+  user: "root",
+  password: "mySQLpassword",
+  database: "sql_music_service",
+  multipleStatements: true
+});
 
 mysqlCon.connect(err => {
-    if (err) throw err;
-    console.log("Connected!");
+  if (err) throw err;
+  console.log("Connected!");
 });
 
 app.get('/', (req, res) => {
-res.send("Hello World!")
+  res.send("Hello World!")
 });
 
 app.get('/top_songs', (req, res) => {
@@ -35,24 +35,38 @@ app.get('/top_songs', (req, res) => {
   LEFT JOIN albums
   ON songs.album=albums.id
   LIMIT 20;`, (error, results, fields) => {
-      if (error) {
-          res.send(err.message);
-          throw error;
-      };
-      res.send(results);
-    });
+    if (error) {
+        res.send(err.message);
+        throw error;
+    };
+    res.send(results);
+  });
 });
 
 app.get('/top_artists', (req, res) => {
   mysqlCon.query(`SELECT id, name, cover_img AS 'cover img', created_at AS 'created at', upload_at AS 'upload at'
   FROM sql_music_service.artists
-  LIMIT 20;`, (error, results, fields) => {
-      if (error) {
-          res.send(err.message);
-          throw error;
-      };
-      res.send(results);
-    });
+  LIMIT 20`, (error, results, fields) => {
+    if (error) {
+        res.send(err.message);
+        throw error;
+    };
+    res.send(results);
+  });
+});
+
+app.get('/top_albums', (req, res) => {
+  mysqlCon.query(`SELECT albums.id, albums.name, artists.name AS artist, albums.cover_img AS 'cover img', albums.created_at AS 'created at', albums.upload_at AS 'upload at'
+  FROM sql_music_service.albums
+  JOIN sql_music_service.artists
+  ON albums.artist=artists.id
+  LIMIT 20`, (error, results, fields) => {
+    if (error) {
+        res.send(err.message);
+        throw error;
+    };
+    res.send(results);
+  });
 });
 
 app.listen(3001);
