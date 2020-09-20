@@ -28,12 +28,24 @@ res.send("Hello World!")
 });
 
 app.get('/top_songs', (req, res) => {
-  mysqlCon.query(`SELECT songs.id, songs.title, songs.length, artists.name AS artist,albums.name AS album, songs.track_number, songs.lyrics, songs.youtube_link, songs.created_at, songs.upload_at
+  mysqlCon.query(`SELECT songs.id, songs.title, songs.length, artists.name AS artist,albums.name AS album, songs.track_number AS 'track number', songs.lyrics, songs.youtube_link AS 'youtube link', songs.created_at AS 'created at', songs.upload_at AS 'upload at'
   FROM sql_music_service.songs
   LEFT JOIN artists
   ON songs.artist=artists.id
   LEFT JOIN albums
   ON songs.album=albums.id
+  LIMIT 20;`, (error, results, fields) => {
+      if (error) {
+          res.send(err.message);
+          throw error;
+      };
+      res.send(results);
+    });
+});
+
+app.get('/top_artists', (req, res) => {
+  mysqlCon.query(`SELECT id, name, cover_img AS 'cover img', created_at AS 'created at', upload_at AS 'upload at'
+  FROM sql_music_service.artists
   LIMIT 20;`, (error, results, fields) => {
       if (error) {
           res.send(err.message);
