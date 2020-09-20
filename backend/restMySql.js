@@ -145,6 +145,16 @@ app.post('/song', async (req, res) =>{
   });
 });
 
+app.post('/artist', async (req, res) =>{
+  mysqlCon.query('INSERT INTO artists SET ?',req.body, (error, results, fields) => {
+    if (error) {
+      res.send(error.message);
+      throw error;
+    };
+    res.send(results);
+  });
+});
+
 app.post('/album', async (req, res) =>{
   mysqlCon.query('INSERT INTO albums SET ?',req.body, (error, results, fields) => {
     if (error) {
