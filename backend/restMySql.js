@@ -36,7 +36,7 @@ app.get('/top_songs', (req, res) => {
   ON songs.album=albums.id
   LIMIT 20;`, (error, results, fields) => {
     if (error) {
-        res.send(err.message);
+        res.send(error.message);
         throw error;
     };
     res.send(results);
@@ -48,7 +48,7 @@ app.get('/top_artists', (req, res) => {
   FROM sql_music_service.artists
   LIMIT 20`, (error, results, fields) => {
     if (error) {
-        res.send(err.message);
+        res.send(error.message);
         throw error;
     };
     res.send(results);
@@ -62,7 +62,7 @@ app.get('/top_albums', (req, res) => {
   ON albums.artist=artists.id
   LIMIT 20`, (error, results, fields) => {
     if (error) {
-        res.send(err.message);
+        res.send(error.message);
         throw error;
     };
     res.send(results);
@@ -78,7 +78,7 @@ app.get('/top_playlists', (req, res) => {
   ON songs_in_playlists.song_id=songs.id
   where playlists.id <= 20`, (error, results, fields) => {
     if (error) {
-      res.send(err.message);
+      res.send(error.message);
       throw error;
     };
     res.send(results);
@@ -88,17 +88,31 @@ app.get('/top_playlists', (req, res) => {
 app.get('/song/:id', async (req, res) =>{
   mysqlCon.query(`SELECT * FROM songs WHERE id=${req.params.id}`, (error, results, fields) => {
     if (error) {
-      res.send(err.message);
+      res.send(error.message);
       throw error;
     };
     res.send(results);
   });
 });
 
-app.get('/artist/:id', async (req, res) =>{
+app.get('/artist/:id', async (req, res) => {
   mysqlCon.query(`SELECT * FROM artists WHERE id=${req.params.id}`, (error, results, fields) => {
     if (error) {
-      res.send(err.message);
+      res.send(error.message);
+      throw error;
+    };
+    res.send(results);
+  });
+});
+
+app.get('/album/:id', async (req, res) =>{
+  mysqlCon.query(`SELECT albums.id, albums.name, artists.name AS artist, albums.cover_img, albums.created_at, albums.upload_at
+  FROM sql_music_service.albums
+  JOIN sql_music_service.artists
+  ON albums.artist=artists.id
+  WHERE albums.id=${req.params.id}`, (error, results, fields) => {
+    if (error) {
+      res.send(error.message);
       throw error;
     };
     res.send(results);
