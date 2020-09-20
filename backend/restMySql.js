@@ -211,12 +211,22 @@ app.put('/album', async (req, res) =>{
 app.put('/playlist', async (req, res) =>{
   mysqlCon.query('UPDATE playlists SET name = ?, cover_img = ?, created_at = ? WHERE id = ?',
   [req.body.name, req.body.cover_img, req.body.created_at, req.body.id], (error, results, fields) => {
-      if (error) {
-          res.send(err.message);
-          throw error;
-      };
-      res.send(results);
-    });
+    if (error) {
+      res.send(err.message);
+      throw error;
+    };
+    res.send(results);
+  });
+});
+
+app.delete('/song/:id', async (req, res) =>{
+  mysqlCon.query('DELETE FROM songs WHERE id = ?',req.params.id, (error, results, fields) => {
+    if (error) {
+      res.send(err.message);
+      throw error;
+    };
+    res.send(results);
+  });
 });
 
 app.listen(3001);
