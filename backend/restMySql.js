@@ -119,4 +119,20 @@ app.get('/album/:id', async (req, res) =>{
   });
 });
 
+app.get('/playlist/:id', (req, res) => {
+  mysqlCon.query(`SELECT playlists.id, playlists.cover_img AS 'cover img', playlists.created_at AS 'created at', playlists.upload_at AS 'upload at', songs.title AS 'song title', songs.artist
+  FROM sql_music_service.playlists
+  LEFT JOIN sql_music_service.songs_in_playlists
+  ON playlists.id=songs_in_playlists.playlist_id
+  LEFT JOIN sql_music_service.songs
+  ON songs_in_playlists.song_id=songs.id
+  where playlists.id=${req.params.id}`, (error, results, fields) => {
+    if (error) {
+      res.send(error.message);
+      throw error;
+    };
+    res.send(results);
+  });
+});
+
 app.listen(3001);
