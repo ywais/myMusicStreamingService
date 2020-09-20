@@ -70,7 +70,7 @@ app.get('/top_albums', (req, res) => {
 });
 
 app.get('/top_playlists', (req, res) => {
-  mysqlCon.query(`SELECT playlists.id, playlists.cover_img AS 'cover img', playlists.created_at AS 'created at', playlists.upload_at AS 'upload at', songs.title AS 'song title', songs.artist
+  mysqlCon.query(`SELECT playlists.id, playlists.name, playlists.cover_img AS 'cover img', playlists.created_at AS 'created at', playlists.upload_at AS 'upload at', songs.title AS 'song title', songs.artist
   FROM sql_music_service.playlists
   LEFT JOIN sql_music_service.songs_in_playlists
   ON playlists.id=songs_in_playlists.playlist_id
@@ -120,7 +120,7 @@ app.get('/album/:id', async (req, res) =>{
 });
 
 app.get('/playlist/:id', (req, res) => {
-  mysqlCon.query(`SELECT playlists.id, playlists.cover_img AS 'cover img', playlists.created_at AS 'created at', playlists.upload_at AS 'upload at', songs.title AS 'song title', songs.artist
+  mysqlCon.query(`SELECT playlists.id, playlists.name, playlists.cover_img AS 'cover img', playlists.created_at AS 'created at', playlists.upload_at AS 'upload at', songs.title AS 'song title', songs.artist
   FROM sql_music_service.playlists
   LEFT JOIN sql_music_service.songs_in_playlists
   ON playlists.id=songs_in_playlists.playlist_id
@@ -206,6 +206,17 @@ app.put('/album', async (req, res) =>{
     };
     res.send(results);
   });
+});
+
+app.put('/playlist', async (req, res) =>{
+  mysqlCon.query('UPDATE playlists SET name = ?, cover_img = ?, created_at = ? WHERE id = ?',
+  [req.body.name, req.body.cover_img, req.body.created_at, req.body.id], (error, results, fields) => {
+      if (error) {
+          res.send(err.message);
+          throw error;
+      };
+      res.send(results);
+    });
 });
 
 app.listen(3001);
