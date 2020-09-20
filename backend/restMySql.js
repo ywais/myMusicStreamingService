@@ -95,4 +95,14 @@ app.get('/song/:id', async (req, res) =>{
   });
 });
 
+app.get('/artist/:id', async (req, res) =>{
+  mysqlCon.query(`SELECT * FROM artists WHERE id=${req.params.id}`, (error, results, fields) => {
+    if (error) {
+      res.send(err.message);
+      throw error;
+    };
+    res.send(results);
+  });
+});
+
 app.listen(3001);
