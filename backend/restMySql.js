@@ -135,4 +135,14 @@ app.get('/playlist/:id', (req, res) => {
   });
 });
 
+app.post('/song', async (req, res) =>{
+  mysqlCon.query('INSERT INTO songs SET ?',req.body, (error, results, fields) => {
+    if (error) {
+      res.send(error.message);
+      throw error;
+    };
+    res.send(results);
+  });
+});
+
 app.listen(3001);
