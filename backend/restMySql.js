@@ -186,4 +186,15 @@ app.put('/song', async (req, res) =>{
   });
 });
 
+app.put('/artist', async (req, res) =>{
+  mysqlCon.query('UPDATE artists SET name = ?, cover_img = ?, created_at = ? WHERE id = ?',
+  [req.body.name, req.body.cover_img, req.body.created_at, req.body.id], (error, results, fields) => {
+    if (error) {
+      res.send(err.message);
+      throw error;
+    };
+    res.send(results);
+  });
+});
+
 app.listen(3001);
