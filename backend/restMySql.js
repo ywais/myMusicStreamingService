@@ -155,4 +155,14 @@ app.post('/album', async (req, res) =>{
   });
 });
 
+app.post('/playlist', async (req, res) =>{
+  mysqlCon.query('INSERT INTO playlists SET ?',req.body, (error, results, fields) => {
+    if (error) {
+      res.send(error);
+      throw error;
+    };
+    res.send(results);
+  });
+});
+
 app.listen(3001);
