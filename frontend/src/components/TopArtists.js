@@ -42,4 +42,4 @@ function TopArtists(props) {
   );
 }
 
-export default TopArtists; 
+export default TopArtists;

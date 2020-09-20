@@ -10,4 +10,4 @@ function SongPreview(props) {
   );
 }
 
-export default SongPreview; 
+export default SongPreview;

@@ -4,9 +4,9 @@ function ArtistPreview(props) {
   return (
     <div className='preview artistPreview'>
       <img src={props.coverImg} alt={props.name} className='roundImg'/>
-      <h4>{props.name}</h4>
+      <h4 className='artistName'>{props.name}</h4>
     </div>
   );
 }
 
-export default ArtistPreview; 
+export default ArtistPreview;
