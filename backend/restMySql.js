@@ -175,4 +175,15 @@ app.post('/playlist', async (req, res) =>{
   });
 });
 
+app.put('/song', async (req, res) =>{
+  mysqlCon.query('UPDATE songs SET title = ?, length = ?, artist = ?, album = ?, track_number = ?, lyrics = ?, youtube_link = ?, created_at = ? WHERE id = ?',
+  [req.body.title, req.body.length, req.body.artist, req.body.album, req.body.track_number, req.body.lyrics, req.body.youtube_link, req.body.created_at, req.body.id], (error, results, fields) => {
+    if (error) {
+      res.send(err.message);
+      throw error;
+    };
+    res.send(results);
+  });
+});
+
 app.listen(3001);
