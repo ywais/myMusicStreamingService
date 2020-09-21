@@ -16,13 +16,12 @@ function Home() {
       const songsResponse = await axios.get('http://localhost:3001/top_songs');
       setSongs(songsResponse.data);
       const artistsResponse = await axios.get('http://localhost:3001/top_artists');
-      const artistsData = artistsResponse.data;
-      setArtists(artistsData);
+      setArtists(artistsResponse.data);
       const albumsResponse = await axios.get('http://localhost:3001/top_albums');
       setAlbums(albumsResponse.data);
       const playlistsResponse = await axios.get('http://localhost:3001/top_playlists');
-      const playlistsData = playlistsResponse.data;
-      setPlaylists(playlistsData);
+      setPlaylists(playlistsResponse.data);
+      console.log('hi');
     };
     getTop20s();
   }, []);
@@ -42,4 +41,4 @@ function Home() {
   );
 }
 
-export default Home; 
+export default Home;

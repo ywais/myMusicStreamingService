@@ -116,7 +116,7 @@ app.get('/album/:id', async (req, res) =>{
 });
 
 app.get('/playlist/:id', (req, res) => {
-  mysqlCon.query(`SELECT playlists.id, playlists.cover_img AS 'coverImg', playlists.created_at AS 'createdAt', playlists.upload_at AS 'uploadAt', songs.title AS 'songTitle', artists.name AS 'artistName'
+  mysqlCon.query(`SELECT playlists.id, playlists.name, playlists.cover_img AS 'coverImg', playlists.created_at AS 'createdAt', playlists.upload_at AS 'uploadAt', songs.title AS 'songTitle', artists.name AS 'artistName', songs.length
   FROM sql_music_service.playlists
   LEFT JOIN sql_music_service.songs_in_playlists
   ON playlists.id=songs_in_playlists.playlist_id

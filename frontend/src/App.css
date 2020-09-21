@@ -23,3 +23,20 @@
   border-radius: 50%;
   object-fit: cover;
 }
+
+.full .info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.full .squareImg, .full div {
+  margin: 0.25em;
+}
+
+.full .squareImg {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+}
+
