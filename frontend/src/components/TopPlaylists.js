@@ -36,7 +36,7 @@ function TopPlaylists(props) {
   ));
 
   return (
-    <Carousel className='carousel playlistCarousel' responsive={responsive}>
+    <Carousel className='carousel playlistsCarousel' responsive={responsive}>
         {addPlaylist(props.playlists)}
     </Carousel>
   );

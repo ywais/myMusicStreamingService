@@ -38,7 +38,7 @@ function TopSongs(props) {
   ));
 
   return (
-    <Carousel className='carousel songCarousel' responsive={responsive}>
+    <Carousel className='carousel songsCarousel' responsive={responsive}>
         {addSong(props.songs)}
     </Carousel>
   );

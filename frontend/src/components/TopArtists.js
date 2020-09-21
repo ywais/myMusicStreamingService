@@ -36,7 +36,7 @@ function TopArtists(props) {
   ));
 
   return (
-    <Carousel className='carousel artistCarousel' responsive={responsive}>
+    <Carousel className='carousel artistsCarousel' responsive={responsive}>
         {addArtist(props.artists)}
     </Carousel>
   );

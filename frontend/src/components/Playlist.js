@@ -23,11 +23,12 @@ function Playlist(props) {
       <div className='info playlistInfo'>
         <img src={playlistData[0].coverImg} alt={playlistData[0].name} className='squareImg'/>
         <div>
-          <h3>{playlistData[0].name}</h3>
+          <h2>{playlistData[0].name}</h2>
           <p>{playlistData[0].createdAt}</p>
         </div>
       </div>
       <div className='songsTable'>
+        <h4>Songs</h4>
         <RcTable songs={songsArray(playlistData)}/>
       </div>
     </div>

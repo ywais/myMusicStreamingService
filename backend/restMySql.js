@@ -28,7 +28,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/top_songs', (req, res) => {
-  mysqlCon.query(`SELECT songs.id, songs.title, songs.length, artists.name AS artist,albums.name AS album, songs.track_number AS 'trackNumber', songs.lyrics, songs.youtube_link AS 'youtubeLink', songs.thumbnails, songs.created_at AS 'createdAt', songs.upload_at AS 'uploadAt'
+  mysqlCon.query(`SELECT songs.id, songs.title, songs.length, artists.name AS artist,albums.name AS album, songs.track_number AS trackNumber, songs.lyrics, songs.youtube_link AS youtubeLink, songs.thumbnails, songs.created_at AS createdAt, songs.upload_at AS uploadAt
   FROM sql_music_service.songs
   LEFT JOIN artists
   ON songs.artist=artists.id
@@ -44,7 +44,7 @@ app.get('/top_songs', (req, res) => {
 });
 
 app.get('/top_artists', (req, res) => {
-  mysqlCon.query(`SELECT id, name, cover_img AS 'coverImg', created_at AS 'createdAt', upload_at AS 'uploadAt'
+  mysqlCon.query(`SELECT id, name, cover_img AS coverImg, created_at AS createdAt, upload_at AS uploadAt
   FROM sql_music_service.artists
   LIMIT 20`, (error, results, fields) => {
     if (error) {
@@ -56,7 +56,7 @@ app.get('/top_artists', (req, res) => {
 });
 
 app.get('/top_albums', (req, res) => {
-  mysqlCon.query(`SELECT albums.id, albums.name, artists.name AS artist, albums.cover_img AS 'coverImg', albums.created_at AS 'createdAt', albums.upload_at AS 'uploadAt'
+  mysqlCon.query(`SELECT albums.id, albums.name, artists.name AS artist, albums.cover_img AS coverImg, albums.created_at AS createdAt, albums.upload_at AS uploadAt
   FROM sql_music_service.albums
   JOIN sql_music_service.artists
   ON albums.artist=artists.id
@@ -70,7 +70,7 @@ app.get('/top_albums', (req, res) => {
 });
 
 app.get('/top_playlists', (req, res) => {
-  mysqlCon.query(`SELECT id, name, cover_img AS 'coverImg', created_at AS 'createdAt', upload_at AS 'uploadAt'
+  mysqlCon.query(`SELECT id, name, cover_img AS coverImg, created_at AS createdAt, upload_at AS uploadAt
   FROM sql_music_service.playlists
   LIMIT 20`, (error, results, fields) => {
     if (error) {
@@ -82,7 +82,13 @@ app.get('/top_playlists', (req, res) => {
 });
 
 app.get('/song/:id', async (req, res) =>{
-  mysqlCon.query(`SELECT * FROM songs WHERE id=${req.params.id}`, (error, results, fields) => {
+  mysqlCon.query(`SELECT songs.id, songs.title, songs.length, artists.name AS artist,albums.name AS album, songs.track_number AS trackNumber, songs.lyrics, songs.youtube_link AS youtubeLink, songs.thumbnails, songs.created_at AS createdAt, songs.upload_at AS uploadAt
+  FROM sql_music_service.songs
+  LEFT JOIN artists
+  ON songs.artist=artists.id
+  LEFT JOIN albums
+  ON songs.album=albums.id
+  WHERE songs.id=${req.params.id}`, (error, results, fields) => {
     if (error) {
       res.send(error.message);
       throw error;
@@ -92,7 +98,13 @@ app.get('/song/:id', async (req, res) =>{
 });
 
 app.get('/artist/:id', async (req, res) => {
-  mysqlCon.query(`SELECT * FROM artists WHERE id=${req.params.id}`, (error, results, fields) => {
+  mysqlCon.query(`SELECT artists.id, artists.name, artists.cover_img AS coverImg, artists.created_at AS createdAt, artists.upload_at AS uploadAt, songs.title AS songTitle, songs.length, albums.name AS album
+  FROM sql_music_service.artists
+  LEFT JOIN sql_music_service.songs
+  ON songs.artist=artists.id
+  LEFT JOIN sql_music_service.albums
+  ON albums.id=songs.album
+  WHERE artists.id=${req.params.id}`, (error, results, fields) => {
     if (error) {
       res.send(error.message);
       throw error;
@@ -102,10 +114,12 @@ app.get('/artist/:id', async (req, res) => {
 });
 
 app.get('/album/:id', async (req, res) =>{
-  mysqlCon.query(`SELECT albums.id, albums.name, artists.name AS artist, albums.cover_img, albums.created_at, albums.upload_at
+  mysqlCon.query(`SELECT albums.id, albums.name, artists.name AS artist, albums.cover_img AS coverImg, albums.created_at AS createdAt, albums.upload_at AS uploadAt, songs.title AS songTitle, songs.length
   FROM sql_music_service.albums
   JOIN sql_music_service.artists
-  ON albums.artist=artists.id
+  ON artists.id=albums.artist
+  LEFT JOIN sql_music_service.songs
+  ON songs.album=albums.id
   WHERE albums.id=${req.params.id}`, (error, results, fields) => {
     if (error) {
       res.send(error.message);
@@ -116,7 +130,7 @@ app.get('/album/:id', async (req, res) =>{
 });
 
 app.get('/playlist/:id', (req, res) => {
-  mysqlCon.query(`SELECT playlists.id, playlists.name, playlists.cover_img AS 'coverImg', playlists.created_at AS 'createdAt', playlists.upload_at AS 'uploadAt', songs.title AS 'songTitle', artists.name AS 'artistName', songs.length
+  mysqlCon.query(`SELECT playlists.id, playlists.name, playlists.cover_img AS coverImg, playlists.created_at AS createdAt, playlists.upload_at AS uploadAt, songs.title AS songTitle, artists.name AS artistName, songs.length
   FROM sql_music_service.playlists
   LEFT JOIN sql_music_service.songs_in_playlists
   ON playlists.id=songs_in_playlists.playlist_id
@@ -125,6 +139,20 @@ app.get('/playlist/:id', (req, res) => {
   LEFT JOIN sql_music_service.artists
   ON songs.artist=artists.id
   where playlists.id=${req.params.id}`, (error, results, fields) => {
+    if (error) {
+      res.send(error.message);
+      throw error;
+    };
+    res.send(results);
+  });
+});
+
+app.get('/artist/:id/albums', async (req, res) => {
+  mysqlCon.query(`SELECT albums.id, albums.name, artists.name AS artist, albums.cover_img AS coverImg, albums.created_at AS createdAt, albums.upload_at AS uploadAt
+  FROM sql_music_service.albums
+  INNER JOIN sql_music_service.artists
+  ON albums.artist=artists.id
+  WHERE albums.artist=${req.params.id}`, (error, results, fields) => {
     if (error) {
       res.send(error.message);
       throw error;

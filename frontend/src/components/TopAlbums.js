@@ -38,7 +38,7 @@ function TopAlbums(props) {
   ));
 
   return (
-    <Carousel className='carousel albumCarousel' responsive={responsive}>
+    <Carousel className='carousel albumsCarousel' responsive={responsive}>
         {addAlbum(props.albums)}
     </Carousel>
   );

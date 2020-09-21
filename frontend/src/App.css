@@ -11,13 +11,13 @@
   text-align: center;
 }
 
-.preview .squareImg {
+.squareImg {
   width: 200px;
   height: 200px;
   object-fit: cover;
 }
 
-.preview .roundImg {
+.roundImg {
   width: 200px;
   height: 200px;
   border-radius: 50%;
@@ -34,18 +34,16 @@
   margin: 0.25em;
 }
 
-.full .squareImg {
-  width: 200px;
-  height: 200px;
-  object-fit: cover;
-}
-
 .songsTable {
   font-size: 1.25em;
-  text-align: center;
+}
+
+.songsTable h4 {
+  margin-bottom: 0;
 }
 
 td {
+  text-align: center;
   background-color: lightgrey;
   border: 1px solid white;
   width: 33vw;
