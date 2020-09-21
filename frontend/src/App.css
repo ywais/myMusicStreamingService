@@ -40,3 +40,13 @@
   object-fit: cover;
 }
 
+.songsTable {
+  font-size: 1.25em;
+  text-align: center;
+}
+
+td {
+  background-color: lightgrey;
+  border: 1px solid white;
+  width: 33vw;
+}

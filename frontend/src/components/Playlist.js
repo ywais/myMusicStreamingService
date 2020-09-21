@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import RcTable from "./RcTable";
 import axios from 'axios';
 
 function Playlist(props) {
@@ -12,8 +13,8 @@ function Playlist(props) {
     getPlaylistData();
   }, []);
 
-  const songsTable = (songs) => songs.map((song) => (
-    `${song.songTitle} - ${song.artistName} ${song.length}. `
+  const songsArray = (songs) => songs.map((song) => (
+    {Title: song.songTitle, Artist: song.artistName, Length: song.length}
   ));
 
   return (
@@ -27,7 +28,7 @@ function Playlist(props) {
         </div>
       </div>
       <div className='songsTable'>
-        {songsTable(playlistData)}
+        <RcTable songs={songsArray(playlistData)}/>
       </div>
     </div>
   );
