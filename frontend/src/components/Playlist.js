@@ -29,7 +29,7 @@ function Playlist(props) {
       </div>
       <div className='songsTable'>
         <h4>Songs</h4>
-        <RcTable songs={songsArray(playlistData)}/>
+        <RcTable songs={songsArray(playlistData)} type='playlist'/>
       </div>
     </div>
   );

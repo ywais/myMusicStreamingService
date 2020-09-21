@@ -67,7 +67,7 @@ return (
       </div>
       <div className='songsTable'>
         <h4>Songs</h4>
-        <RcTable songs={songsArray(artistData)}/>
+        <RcTable songs={songsArray(artistData)} type='artist'/>
       <h4>Albums</h4>
       <Carousel className='carousel artistCarousel' responsive={responsive}>
         {addArtistAlbum(artistAlbumsData)}

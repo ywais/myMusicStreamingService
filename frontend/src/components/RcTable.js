@@ -1,7 +1,7 @@
 import React from 'react';
 import Table from "rc-table";
 
-function RcTable({songs}) {
+function RcTable({songs, type}) {
   const columns = Object.keys(songs[0]).map(key => ({
       title: key,
       dataIndex: key,
@@ -16,7 +16,7 @@ function RcTable({songs}) {
   });
 
   if(songs[0].Title === null) {
-    return <h4>No songs in playlist</h4>;
+    return <h4>No songs {type==='artist'?'for':'in'} {type}</h4>;
   } else {
     return (
       <Table
