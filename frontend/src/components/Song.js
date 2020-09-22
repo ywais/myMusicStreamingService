@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import RcTable from "./RcTable";
+import RcTable from './RcTable';
 import qs from 'qs';
 import axios from 'axios';
 
@@ -24,7 +24,7 @@ console.log(songData);
   return (
     <div className='full fullSong'>
       <h1>Song {props.match.params.id}</h1>
-      <section className={songData.length > 1 ? 'flex' : ''}>
+      <section className={songData.length > 1 ? 'split' : 'noSplit'}>
         <div className='info songInfo'>
           <iframe width='560' height='315'
           src={getEmbed(songData[0])}

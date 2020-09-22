@@ -1,5 +1,5 @@
 import React from 'react';
-import Table from "rc-table";
+import Table from 'rc-table';
 
 function RcTable({songs, type}) {
   if(songs.length && songs[0].Title !== null) {
@@ -19,7 +19,7 @@ function RcTable({songs, type}) {
       <Table
         columns={columns}
         data={data}
-        tableLayout="auto"
+        tableLayout='auto'
       />
     );
   } else {

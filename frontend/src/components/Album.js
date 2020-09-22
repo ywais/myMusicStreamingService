@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import RcTable from "./RcTable";
+import RcTable from './RcTable';
 import axios from 'axios';
 
 function Album(props) {
@@ -18,7 +18,7 @@ function Album(props) {
   ));
 
   return (
-    <div className="full fullAlbum">
+    <div className='full fullAlbum'>
       <h1>Album {props.match.params.id}</h1>
       <div className='info albumInfo'>
         <img src={albumData[0].coverImg} alt={albumData[0].name} className='squareImg'/>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import RcTable from "./RcTable";
+import RcTable from './RcTable';
 import axios from 'axios';
 
 function Playlist(props) {
@@ -18,7 +18,7 @@ function Playlist(props) {
   ));
 
   return (
-    <div className="full fullPlaylist">
+    <div className='full fullPlaylist'>
       <h1>Playlist {props.match.params.id}</h1>
       <div className='info playlistInfo'>
         <img src={playlistData[0].coverImg} alt={playlistData[0].name} className='squareImg'/>

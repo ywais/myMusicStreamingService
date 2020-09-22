@@ -11,20 +11,20 @@ function logger (req, res, next) {
 }
 
 let mysqlCon = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "mySQLpassword",
-  database: "sql_music_service",
+  host: 'localhost',
+  user: 'root',
+  password: 'mySQLpassword',
+  database: 'sql_music_service',
   multipleStatements: true
 });
 
 mysqlCon.connect(err => {
   if (err) throw err;
-  console.log("Connected!");
+  console.log('Connected!');
 });
 
 app.get('/', (req, res) => {
-  res.send("Hello World!")
+  res.send('Hello World!')
 });
 
 app.get('/top_songs', (req, res) => {

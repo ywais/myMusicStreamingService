@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import RcTable from "./RcTable";
+import RcTable from './RcTable';
 import AlbumPreview from './AlbumPreview';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
@@ -57,7 +57,7 @@ function Artist(props) {
   ));
 
 return (
-    <div className="full fullArtist">
+    <div className='full fullArtist'>
       <h1>Artist {props.match.params.id}</h1>
       <div className='info artistInfo'>
         <img src={artistData[0].coverImg} alt={artistData[0].name} className='squareImg'/>

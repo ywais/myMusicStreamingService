@@ -49,18 +49,22 @@ td {
   width: 33vw;
 }
 
-
-.flex{
+.split{
   display: flex;
   flex-direction: row;
 }
 
-.flex .songsTable{
+.split .songsTable{
   width: 40vw;
 }
 
-.flex .songInfo{
+.split .songInfo{
   display: flex;
   flex-direction: column;
   width: 60vw;
+}
+  
+.noSplit .songInfo{
+  display: flex;
+  flex-direction: column;
 }
