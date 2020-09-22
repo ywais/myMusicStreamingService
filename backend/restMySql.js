@@ -81,8 +81,52 @@ app.get('/top_playlists', (req, res) => {
   });
 });
 
-app.get('/song/:id', async (req, res) =>{
-  mysqlCon.query(`SELECT songs.id, songs.title, songs.length, artists.name AS artist,albums.name AS album, songs.track_number AS trackNumber, songs.lyrics, songs.youtube_link AS youtubeLink, songs.thumbnails, songs.created_at AS createdAt, songs.upload_at AS uploadAt
+app.get('/song/:id', async (req, res) => {
+  let paramsQuery = 'none';
+  if (req.query.artist) {
+    mysqlCon.query(`SELECT songs.id, songs.title, artists.name AS artist, songs.length
+    FROM sql_music_service.songs
+    LEFT JOIN artists
+    ON songs.artist=artists.id
+    WHERE artists.id=${req.query.artist}`, (error, results, fields) => {
+      if (error) {
+        res.send(error.message);
+        throw error;
+      };
+      paramsQuery = results;
+    });
+  } else if (req.query.album) {
+    mysqlCon.query(`SELECT songs.id, songs.title, artists.name AS artist, songs.length
+    FROM sql_music_service.songs
+    LEFT JOIN artists
+    ON songs.artist=artists.id
+    LEFT JOIN albums
+    ON songs.album=albums.id
+    WHERE albums.id=${req.query.album}`, (error, results, fields) => {
+      if (error) {
+        res.send(error.message);
+        throw error;
+      };
+      paramsQuery = results;
+    });
+  } else if (req.query.playlist) {
+    mysqlCon.query(`SELECT playlists.id, songs.title, artists.name AS artist, songs.length
+    FROM sql_music_service.playlists
+    LEFT JOIN sql_music_service.songs_in_playlists
+    ON playlists.id=songs_in_playlists.playlist_id
+    LEFT JOIN sql_music_service.songs
+    ON songs_in_playlists.song_id=songs.id
+    LEFT JOIN sql_music_service.artists
+    ON songs.artist=artists.id
+    where playlists.id=${req.query.playlist}`, (error, results, fields) => {
+      if (error) {
+        res.send(error.message);
+        throw error;
+      };
+      paramsQuery = results;
+    });
+  }
+  mysqlCon.query(`SELECT songs.id, songs.youtube_link AS youtubeLink, songs.title, artists.name AS artist, albums.name AS album, songs.track_number AS trackNumber, songs.length, songs.lyrics
   FROM sql_music_service.songs
   LEFT JOIN artists
   ON songs.artist=artists.id
@@ -93,7 +137,11 @@ app.get('/song/:id', async (req, res) =>{
       res.send(error.message);
       throw error;
     };
-    res.send(results);
+    if(paramsQuery !== 'none') {
+      res.send(results.concat([paramsQuery]));
+    } else {
+      res.send(results);
+    }
   });
 });
 
@@ -113,7 +161,7 @@ app.get('/artist/:id', async (req, res) => {
   });
 });
 
-app.get('/album/:id', async (req, res) =>{
+app.get('/album/:id', async (req, res) => {
   mysqlCon.query(`SELECT albums.id, albums.name, artists.name AS artist, albums.cover_img AS coverImg, albums.created_at AS createdAt, albums.upload_at AS uploadAt, songs.title AS songTitle, songs.length
   FROM sql_music_service.albums
   JOIN sql_music_service.artists
@@ -161,7 +209,7 @@ app.get('/artist/:id/albums', async (req, res) => {
   });
 });
 
-app.post('/song', async (req, res) =>{
+app.post('/song', async (req, res) => {
   mysqlCon.query('INSERT INTO songs SET ?',req.body, (error, results, fields) => {
     if (error) {
       res.send(error.message);
@@ -171,7 +219,7 @@ app.post('/song', async (req, res) =>{
   });
 });
 
-app.post('/artist', async (req, res) =>{
+app.post('/artist', async (req, res) => {
   mysqlCon.query('INSERT INTO artists SET ?',req.body, (error, results, fields) => {
     if (error) {
       res.send(error.message);
@@ -181,7 +229,7 @@ app.post('/artist', async (req, res) =>{
   });
 });
 
-app.post('/album', async (req, res) =>{
+app.post('/album', async (req, res) => {
   mysqlCon.query('INSERT INTO albums SET ?',req.body, (error, results, fields) => {
     if (error) {
       res.send(error);
@@ -191,7 +239,7 @@ app.post('/album', async (req, res) =>{
   });
 });
 
-app.post('/playlist', async (req, res) =>{
+app.post('/playlist', async (req, res) => {
   mysqlCon.query('INSERT INTO playlists SET ?',req.body, (error, results, fields) => {
     if (error) {
       res.send(error);
@@ -201,7 +249,7 @@ app.post('/playlist', async (req, res) =>{
   });
 });
 
-app.put('/song', async (req, res) =>{
+app.put('/song', async (req, res) => {
   mysqlCon.query('UPDATE songs SET title = ?, length = ?, artist = ?, album = ?, track_number = ?, lyrics = ?, youtube_link = ?, created_at = ? WHERE id = ?',
   [req.body.title, req.body.length, req.body.artist, req.body.album, req.body.track_number, req.body.lyrics, req.body.youtube_link, req.body.created_at, req.body.id], (error, results, fields) => {
     if (error) {
@@ -212,7 +260,7 @@ app.put('/song', async (req, res) =>{
   });
 });
 
-app.put('/artist', async (req, res) =>{
+app.put('/artist', async (req, res) => {
   mysqlCon.query('UPDATE artists SET name = ?, cover_img = ?, created_at = ? WHERE id = ?',
   [req.body.name, req.body.cover_img, req.body.created_at, req.body.id], (error, results, fields) => {
     if (error) {
@@ -223,7 +271,7 @@ app.put('/artist', async (req, res) =>{
   });
 });
 
-app.put('/album', async (req, res) =>{
+app.put('/album', async (req, res) => {
   mysqlCon.query('UPDATE albums SET name = ?, artist = ?, cover_img = ?, created_at = ? WHERE id = ?',
   [req.body.name, req.body.artist, req.body.cover_img, req.body.created_at, req.body.id], (error, results, fields) => {
     if (error) {
@@ -234,7 +282,7 @@ app.put('/album', async (req, res) =>{
   });
 });
 
-app.put('/playlist', async (req, res) =>{
+app.put('/playlist', async (req, res) => {
   mysqlCon.query('UPDATE playlists SET name = ?, cover_img = ?, created_at = ? WHERE id = ?',
   [req.body.name, req.body.cover_img, req.body.created_at, req.body.id], (error, results, fields) => {
     if (error) {
@@ -245,7 +293,7 @@ app.put('/playlist', async (req, res) =>{
   });
 });
 
-app.delete('/song/:id', async (req, res) =>{
+app.delete('/song/:id', async (req, res) => {
   mysqlCon.query('DELETE FROM songs WHERE id = ?',req.params.id, (error, results, fields) => {
     if (error) {
       res.send(err.message);
@@ -255,7 +303,7 @@ app.delete('/song/:id', async (req, res) =>{
   });
 });
 
-app.delete('/artist/:id', async (req, res) =>{
+app.delete('/artist/:id', async (req, res) => {
   mysqlCon.query('DELETE FROM artists WHERE id = ?',req.params.id, (error, results, fields) => {
     if (error) {
       res.send(err.message);
@@ -265,7 +313,7 @@ app.delete('/artist/:id', async (req, res) =>{
   });
 });
 
-app.delete('/album/:id', async (req, res) =>{
+app.delete('/album/:id', async (req, res) => {
   mysqlCon.query('DELETE FROM albums WHERE id = ?',req.params.id, (error, results, fields) => {
     if (error) {
       res.send(err.message);
@@ -275,7 +323,7 @@ app.delete('/album/:id', async (req, res) =>{
   });
 });
 
-app.delete('/playlist/:id', async (req, res) =>{
+app.delete('/playlist/:id', async (req, res) => {
   mysqlCon.query('DELETE FROM playlists WHERE id = ?',req.params.id, (error, results, fields) => {
     if (error) {
       res.send(err.message);
