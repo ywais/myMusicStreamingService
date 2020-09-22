@@ -48,3 +48,19 @@ td {
   border: 1px solid white;
   width: 33vw;
 }
+
+
+.flex{
+  display: flex;
+  flex-direction: row;
+}
+
+.flex .songsTable{
+  width: 40vw;
+}
+
+.flex .songInfo{
+  display: flex;
+  flex-direction: column;
+  width: 60vw;
+}
