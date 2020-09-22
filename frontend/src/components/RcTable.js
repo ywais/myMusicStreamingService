@@ -2,6 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Table from 'rc-table';
 
+// songs (array): first item - array of song data for table
+//                second item - array of data for links
+// type (string): which page sent the data
 function RcTable({songs, type}) {
   if(songs.length && songs[0][0].Title !== null) {
     const columns = Object.keys(songs[0][0]).map(key => ({

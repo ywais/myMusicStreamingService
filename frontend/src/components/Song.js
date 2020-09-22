@@ -6,7 +6,7 @@ import axios from 'axios';
 
 function Song(props) {
   const [songData, setSongData] = useState([{}]);
-  const paersedQuery = qs.parse(props.location.search, { ignoreQueryPrefix: true });
+  const paersedQuery = qs.parse(props.location.search, { ignoreQueryPrefix: true }); // query params as object
 
   useEffect(() => {
     const getSongData = async () => {
@@ -16,8 +16,10 @@ function Song(props) {
     getSongData();
   }, [props.match.params.id, paersedQuery]);
 
+  // see RcTable notes
   const songsArray = (songs) => songs.map((song) => (
-    [{Title: song.title, Artist: song.artist, Length: song.length}, {songId: song.songId, artistId: song.artistId, myId: song.id}]
+    [{Title: song.title, Artist: song.artist, Length: song.length},
+      {songId: song.songId, artistId: song.artistId, myId: song.id}]
   ));
 
   return (
@@ -41,6 +43,7 @@ function Song(props) {
             <p>{songData[0].lyrics}</p>
           </div>
         </div>
+        {/* show more songs if query params */}
         {songData.length > 1 ?
           <div className='songsTable'>
             <h4>More Songs</h4>

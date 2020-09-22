@@ -43,8 +43,10 @@ function Artist(props) {
     }
   };
 
+  // see RcTable notes
   const songsArray = (songs) => songs.map((song) => (
-    [{Title: song.title, Album: song.album, Length: song.length}, {songId: song.songId, albumId: song.albumId, myId: song.id}]
+    [{Title: song.title, Album: song.album, Length: song.length},
+      {songId: song.songId, albumId: song.albumId, myId: song.id}]
   ));
 
   const addArtistAlbum = (artistAlbums) => artistAlbums.map((artistAlbum) => (

@@ -14,8 +14,10 @@ function Album(props) {
     getAlbumData();
   }, [props.match.params.id]);
 
+  // see RcTable notes
   const songsArray = (songs) => songs.map((song) => (
-    [{Title: song.title, Artist: song.artist, Length: song.length}, {songId: song.songId, artistId: song.artistId, myId: song.id}]
+    [{Title: song.title, Artist: song.artist, Length: song.length},
+      {songId: song.songId, artistId: song.artistId, myId: song.id}]
   ));
 
   return (
