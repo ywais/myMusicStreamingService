@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import RcTable from './RcTable';
 import AlbumPreview from './AlbumPreview';
 import Carousel from 'react-multi-carousel';
@@ -17,7 +18,7 @@ function Artist(props) {
       setArtistAlbumsData(artistAlbumsResponse.data);
     };
     getArtistData();
-  }, []);
+  }, [props.match.params.id]);
 
   const responsive = {
     superLargeDesktop: {
@@ -43,17 +44,19 @@ function Artist(props) {
   };
 
   const songsArray = (songs) => songs.map((song) => (
-    {Title: song.songTitle, Album: song.album, Length: song.length}
+    [{Title: song.title, Album: song.album, Length: song.length}, {songId: song.songId, albumId: song.albumId, myId: song.id}]
   ));
 
   const addArtistAlbum = (artistAlbums) => artistAlbums.map((artistAlbum) => (
-    <AlbumPreview
-      key={artistAlbum.id}
-      name={artistAlbum.name}
-      artist={artistAlbum.artist}
-      createdAt={artistAlbum.createdAt}
-      coverImg={artistAlbum.coverImg}
-    />
+    <Link to={`/album/${artistAlbum.id}`}>
+      <AlbumPreview
+        key={artistAlbum.id}
+        name={artistAlbum.name}
+        artist={artistAlbum.artist}
+        createdAt={artistAlbum.createdAt}
+        coverImg={artistAlbum.coverImg}
+      />
+    </Link>
   ));
 
 return (

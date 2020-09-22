@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import RcTable from './RcTable';
 import qs from 'qs';
 import axios from 'axios';
@@ -6,19 +7,17 @@ import axios from 'axios';
 function Song(props) {
   const [songData, setSongData] = useState([{}]);
   const paersedQuery = qs.parse(props.location.search, { ignoreQueryPrefix: true });
-console.log(songData);
+
   useEffect(() => {
     const getSongData = async () => {
       const { data } = await axios.get(`http://localhost:3001/song/${props.match.params.id}?${Object.keys(paersedQuery)[0]}=${paersedQuery[Object.keys(paersedQuery)[0]]}`);
       setSongData(data);
     };
     getSongData();
-  }, []);
-
-  const getEmbed = songProperties => `https://www.youtube.com/embed/${songProperties.youtubeLink?songProperties.youtubeLink.substring(17):''}`
+  }, [props.match.params.id, paersedQuery]);
 
   const songsArray = (songs) => songs.map((song) => (
-    {Title: song.title, Artist: song.artist, Length: song.length}
+    [{Title: song.title, Artist: song.artist, Length: song.length}, {songId: song.songId, artistId: song.artistId, myId: song.id}]
   ));
 
   return (
@@ -26,16 +25,18 @@ console.log(songData);
       <h1>Song {props.match.params.id}</h1>
       <section className={songData.length > 1 ? 'split' : 'noSplit'}>
         <div className='info songInfo'>
-          <iframe width='560' height='315'
-          src={getEmbed(songData[0])}
+          <iframe
+          title={songData[0].title}
+          width='560' height='315'
+          src={`https://www.youtube.com/embed/${songData[0].youtubeLink?songData[0].youtubeLink.substring(17):''}`}
           frameborder='0'
           allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
           allowfullscreen>
           </iframe>
           <div>
             <h2>{songData[0].title}</h2>
-            <h3>{songData[0].artist}</h3>
-            <p>{songData[0].album} {songData[0].trackNumber}. {songData[0].length}</p>
+            <Link to={`/artist/${songData[0].artistId}`}><h3>{songData[0].artist}</h3></Link>
+            <p><Link to={`/album/${songData[0].albumId}`}>{songData[0].album}</Link> {songData[0].trackNumber ? `${songData[0].trackNumber}.` : ''} {songData[0].length}</p>
             <h4>Lyrics:</h4>
             <p>{songData[0].lyrics}</p>
           </div>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import PlaylistPreview from './PlaylistPreview';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
@@ -28,11 +29,13 @@ function TopPlaylists(props) {
   };
 
   const addPlaylist = (playlists) => playlists.map((playlist) => (
-    <PlaylistPreview
-      key={playlist.id}
-      name={playlist.name}
-      coverImg={playlist.coverImg}
-    />
+    <Link to={`/playlist/${playlist.id}`}>
+      <PlaylistPreview
+        key={playlist.id}
+        name={playlist.name}
+        coverImg={playlist.coverImg}
+      />
+    </Link>
   ));
 
   return (

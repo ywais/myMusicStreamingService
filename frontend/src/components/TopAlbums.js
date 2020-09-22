@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import AlbumPreview from './AlbumPreview';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
@@ -28,13 +29,15 @@ function TopAlbums(props) {
   };
 
   const addAlbum = (albums) => albums.map((album) => (
-    <AlbumPreview
-      key={album.id}
-      name={album.name}
-      artist={album.artist}
-      createdAt={album.createdAt}
-      coverImg={album.coverImg}
-    />
+    <Link to={`/album/${album.id}`}>
+      <AlbumPreview
+        key={album.id}
+        name={album.name}
+        artist={album.artist}
+        createdAt={album.createdAt}
+        coverImg={album.coverImg}
+      />
+    </Link>
   ));
 
   return (

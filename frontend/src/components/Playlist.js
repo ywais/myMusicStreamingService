@@ -11,10 +11,10 @@ function Playlist(props) {
       setPlaylistData(data);
     };
     getPlaylistData();
-  }, []);
+  }, [props.match.params.id]);
 
   const songsArray = (songs) => songs.map((song) => (
-    {Title: song.songTitle, Artist: song.artistName, Length: song.length}
+    [{Title: song.title, Artist: song.artist, Length: song.length}, {songId: song.songId, artistId: song.artistId, myId: song.id}]
   ));
 
   return (

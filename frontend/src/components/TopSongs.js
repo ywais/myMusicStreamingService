@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import SongPreview from './SongPreview';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
@@ -28,13 +29,15 @@ function TopSongs(props) {
   };
 
   const addSong = (songs) => songs.map((song) => (
-    <SongPreview
-      key={song.id}
-      title={song.title}
-      length={song.length}
-      artist={song.artist}
-      thumbnails={song.thumbnails}
-    />
+    <Link to={`/song/${song.id}`}>
+      <SongPreview
+        key={song.id}
+        title={song.title}
+        length={song.length}
+        artist={song.artist}
+        thumbnails={song.thumbnails}
+      />
+    </Link>
   ));
 
   return (

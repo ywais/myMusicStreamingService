@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import ArtistPreview from './ArtistPreview';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
@@ -28,11 +29,13 @@ function TopArtists(props) {
   };
 
   const addArtist = (artists) => artists.map((artist) => (
-    <ArtistPreview
-      key={artist.id}
-      name={artist.name}
-      coverImg={artist.coverImg}
-    />
+    <Link to={`/artist/${artist.id}`}>
+      <ArtistPreview
+        key={artist.id}
+        name={artist.name}
+        coverImg={artist.coverImg}
+      />
+    </Link>
   ));
 
   return (

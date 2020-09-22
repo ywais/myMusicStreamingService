@@ -84,7 +84,7 @@ app.get('/top_playlists', (req, res) => {
 app.get('/song/:id', async (req, res) => {
   let paramsQuery = 'none';
   if (req.query.artist) {
-    mysqlCon.query(`SELECT songs.id, songs.title, artists.name AS artist, songs.length
+    mysqlCon.query(`SELECT songs.id AS songId, songs.title, artists.id AS artistId, artists.name AS artist, songs.length, artists.id
     FROM sql_music_service.songs
     LEFT JOIN artists
     ON songs.artist=artists.id
@@ -96,7 +96,7 @@ app.get('/song/:id', async (req, res) => {
       paramsQuery = results;
     });
   } else if (req.query.album) {
-    mysqlCon.query(`SELECT songs.id, songs.title, artists.name AS artist, songs.length
+    mysqlCon.query(`SELECT songs.id AS songId, songs.title, artists.id AS artistId, artists.name AS artist, songs.length, albums.id
     FROM sql_music_service.songs
     LEFT JOIN artists
     ON songs.artist=artists.id
@@ -110,7 +110,7 @@ app.get('/song/:id', async (req, res) => {
       paramsQuery = results;
     });
   } else if (req.query.playlist) {
-    mysqlCon.query(`SELECT playlists.id, songs.title, artists.name AS artist, songs.length
+    mysqlCon.query(`SELECT songs.id AS songId, songs.title, artists.id AS artistId, artists.name AS artist, songs.length, playlists.id
     FROM sql_music_service.playlists
     LEFT JOIN sql_music_service.songs_in_playlists
     ON playlists.id=songs_in_playlists.playlist_id
@@ -126,7 +126,7 @@ app.get('/song/:id', async (req, res) => {
       paramsQuery = results;
     });
   }
-  mysqlCon.query(`SELECT songs.id, songs.youtube_link AS youtubeLink, songs.title, artists.name AS artist, albums.name AS album, songs.track_number AS trackNumber, songs.length, songs.lyrics
+  mysqlCon.query(`SELECT songs.id AS songId, songs.youtube_link AS youtubeLink, songs.title, artists.id AS artistId, artists.name AS artist, albums.id AS albumId, albums.name AS album, songs.track_number AS trackNumber, songs.length, songs.lyrics
   FROM sql_music_service.songs
   LEFT JOIN artists
   ON songs.artist=artists.id
@@ -146,7 +146,7 @@ app.get('/song/:id', async (req, res) => {
 });
 
 app.get('/artist/:id', async (req, res) => {
-  mysqlCon.query(`SELECT artists.id, artists.name, artists.cover_img AS coverImg, artists.created_at AS createdAt, artists.upload_at AS uploadAt, songs.title AS songTitle, songs.length, albums.name AS album
+  mysqlCon.query(`SELECT artists.id, artists.name, artists.cover_img AS coverImg, artists.created_at AS createdAt, artists.upload_at AS uploadAt,songs.id AS songId, songs.title AS title, songs.length, albums.id AS albumId, albums.name AS album
   FROM sql_music_service.artists
   LEFT JOIN sql_music_service.songs
   ON songs.artist=artists.id
@@ -162,7 +162,7 @@ app.get('/artist/:id', async (req, res) => {
 });
 
 app.get('/album/:id', async (req, res) => {
-  mysqlCon.query(`SELECT albums.id, albums.name, artists.name AS artist, albums.cover_img AS coverImg, albums.created_at AS createdAt, albums.upload_at AS uploadAt, songs.title AS songTitle, songs.length
+  mysqlCon.query(`SELECT albums.id, albums.name, artists.id AS artistId, artists.name AS artist, albums.cover_img AS coverImg, albums.created_at AS createdAt, albums.upload_at AS uploadAt, songs.id AS songId, songs.title AS title, songs.length
   FROM sql_music_service.albums
   JOIN sql_music_service.artists
   ON artists.id=albums.artist
@@ -178,7 +178,7 @@ app.get('/album/:id', async (req, res) => {
 });
 
 app.get('/playlist/:id', (req, res) => {
-  mysqlCon.query(`SELECT playlists.id, playlists.name, playlists.cover_img AS coverImg, playlists.created_at AS createdAt, playlists.upload_at AS uploadAt, songs.title AS songTitle, artists.name AS artistName, songs.length
+  mysqlCon.query(`SELECT playlists.id, playlists.name, playlists.cover_img AS coverImg, playlists.created_at AS createdAt, playlists.upload_at AS uploadAt, songs.id AS songId, songs.title AS title, artists.id AS artistId, artists.name AS artist, songs.length
   FROM sql_music_service.playlists
   LEFT JOIN sql_music_service.songs_in_playlists
   ON playlists.id=songs_in_playlists.playlist_id

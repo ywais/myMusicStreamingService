@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import RcTable from './RcTable';
 import axios from 'axios';
 
@@ -11,10 +12,10 @@ function Album(props) {
       setAlbumData(data);
     };
     getAlbumData();
-  }, []);
+  }, [props.match.params.id]);
 
   const songsArray = (songs) => songs.map((song) => (
-    {Title: song.songTitle, Artist: song.artist, Length: song.length}
+    [{Title: song.title, Artist: song.artist, Length: song.length}, {songId: song.songId, artistId: song.artistId, myId: song.id}]
   ));
 
   return (
@@ -24,7 +25,7 @@ function Album(props) {
         <img src={albumData[0].coverImg} alt={albumData[0].name} className='squareImg'/>
         <div>
           <h2>{albumData[0].name}</h2>
-          <p>{albumData[0].artist}</p>
+          <Link to={`/artist/${albumData[0].artistId}`}><p>{albumData[0].artist}</p></Link>
         </div>
       </div>
       <div className='songsTable'>
